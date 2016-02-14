@@ -1,0 +1,732 @@
+---
+layout: post
+title: Drones
+description: US drone bombings
+img: /img/drones.png
+comments: true
+---
+<base href="http://christophershane.github.io/">
+        <link rel="shortcut icon" href="/assets/img/icon_clip.png"/>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<link href="http://fonts.googleapis.com/css?family=Comfortaa:400,700" rel="stylesheet" />
+        <link href='http://fonts.googleapis.com/css?family=Karla:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+
+		<script src="/assets/js/jquery.min.js"></script>
+		<script src="/assets/js/jquery.dropotron.js"></script>
+		<script src="/assets/js/config.js"></script>
+		<script src="/assets/js/skel.min.js"></script>
+		<script src="/assets/js/skel-panels.min.js"></script>
+
+        <noscript>
+        <link rel="stylesheet" href="/assets/css/skel-noscript.css" />
+        <link rel="stylesheet" href="/assets/css/style.css" />
+        <link rel="stylesheet" href="/assets/css/style-desktop.css" />
+        </noscript>
+
+		<!--[if lte IE 8]><script src="js/html5shiv.js"></script><link rel="stylesheet" href="css/ie8.css" /><![endif]-->
+
+        <style type="text/css">
+            .datalayer, .datalayer svg { position: absolute; }
+            .hexagon  { stroke: #fff; stroke-width: 0.5; }
+            .hexagonkey  { stroke: #000; stroke-width: 1; }
+        </style>
+
+        <script src="/assets/js/d3/d3.v3.min.js"></script>
+        <script src="/assets/js/d3/d3.hexbin.v0.min.js"></script>
+        <script src="/assets/js/d3/queue.v1.min.js"></script>
+        <script src="/assets/js/d3/topojson.v1.min.js"></script>
+
+        <script src="/assets/jquery-ui/jquery-ui.js"></script>
+        <link rel="stylesheet" href="/assets/jquery-ui/jquery-ui.css" />
+        <script src="/assets/jquery-ui/jquery.ui.touch-punch.min.js"></script>
+        <script src="/assets/js/jQAllRangeSliders-min.js"></script>
+        <link rel="stylesheet" href="/assets/css/classic-min.css" />
+        <link rel="stylesheet" href="/assets/css/onoffswitch.css" />
+        <script src="/assets/js/knob.js"></script>
+
+        <script src="/js/analytics.js"></script>
+
+        <style>
+          td {
+              font-family: Raleway, sans-serif;
+              font-weight: 500;
+          }
+          td.inforow {
+              border-bottom: 1px solid #d3d3d3;
+          }
+          a.info {
+              font-family: Raleway, sans-serif;
+              font-weight: 500;
+          }
+          html, body, #map-canvas {
+            height: 100%;
+            margin: 0px;
+            padding: 0px
+          }
+          .controls {
+            margin-top: 16px;
+            border: 1px solid transparent;
+            border-radius: 2px 0 0 2px;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            height: 24px;
+            outline: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+          }
+          #pac-input {
+            background-color: #fff;
+            padding: 0 11px 0 13px;
+            width: 300px;
+            font-family: Roboto;
+            font-size: 13px;
+            font-weight: 300;
+            text-overflow: ellipsis;
+          }
+          #pac-input:focus {
+            border-color: #4d90fe;
+            margin-left: -1px;
+            padding-left: 14px;  /* Regular padding-left + 1. */
+            width: 301px;
+          }
+          .pac-container {
+            font-family: Roboto;
+          }
+          #type-selector {
+            color: #fff;
+            background-color: #4d90fe;
+            padding: 5px 11px 0px 11px;
+          }
+          #type-selector label {
+            font-family: Roboto;
+            font-size: 13px;
+            font-weight: 300;
+          }
+        </style>
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+    </head>
+
+	<body class="right-sidebar">
+		<!-- Main Wrapper -->
+			<div id="main-wrapper">
+				<div class="container big" style="width: 90%">
+					<div class="row">
+						<div class="12u">
+							<!-- Portfolio -->
+								<section>
+									<div>
+										<div class="row">
+											<div class="3u skel-cell-mainContent">
+                                                <article class="box is-post">
+                                                    <h2>US Drone Strikes</h2><hr/>
+                                                    <h3>Resolution</h3><div id="resolutionslider"></div><br/>
+                                                    <h3>Volume</h3><div id="volumeslider" style="margin-bottom: 20px;"></div><hr style="margin-bottom: 12px;"/>
+                                                    <table style="width: 100%; margin-bottom: 0px;">
+                                                        <tr>
+                                                            <td style="width: 30%; vertical-align: top; font-size: 1.1em; font-weight: 700; color: #252122">Animation<br/>
+                                                            <div style="margin-left: 5px;" class="onoffswitch">
+                                                                <input  onclick="toggleAnimate()" type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="myonoffswitch">
+                                                                <label class="onoffswitch-label" for="myonoffswitch">
+                                                                    <div class="onoffswitch-inner"></div>
+                                                                    <div class="onoffswitch-switch"></div>
+                                                                </label>
+                                                            </div>
+                                                            </td>
+                                                            <td style="width: 30%;"></td>
+                                                            <td>
+                                                            <span style="width: 100%;margin:auto;">
+                                                                Speed<br/><input title="speed" id="speed" type="text" value="50" class="dial"></span>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <b>Strike Date</b><div style="margin-top: 35px;" id="dateslider"></div><br/>
+                                                    <table>
+                                                        <tr>
+                                                            <td style="width: 8em;"><b>Animate</b></td>
+                                                            <td>
+                                                                <input type="radio" name="animate" id="min" value="min">min<br>
+                                                                <input type="radio" name="animate" id="max" value="max">max<br>
+                                                                <input type="radio" name="animate" id="minmax" value="minmax" checked>min + max<br>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table>
+                                                        <tr>
+                                                            <td style="width: 8em;"><b>Step (days)</b><br/>
+                                                            <input type="text" size="5" id="step" value="30"><br></td>
+                                                            <td><b>Direction</b><br/>
+                                                            <input type="radio" name="direction" checked value="forward">forward<br>
+                                                            <input type="radio" name="direction" value="back">back<br></td>
+                                                        </tr>
+                                                    </table>
+                                                    <hr/><h4>Key</h4>
+                                                    <table style="vertical-align: middle">
+                                                        <tr>
+                                                            <td style="text-align: center"><span id="minhex"><svg><path></path></svg></span></td>
+                                                            <td style="vertical-align: middle;"><span id="minbinlabel" style=" margin-left: 10px;"></span> <span class="mapunit"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><span id="maxhex"><svg><path></path></svg></span></td>
+                                                            <td style="vertical-align: middle;"><span id="maxbinlabel" style=" margin-left: 10px;"></span> <span class="mapunit"></span>s</td>
+                                                        </tr>
+                                                    </table>
+                                                </article>
+											</div>
+											<div class="9u skel-cell-mainContent">
+                                                <div style="height: 600px;" class="box" id="map"></div>
+                                                <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+                                                <article class="box is-post">
+                                                    <table style="width: 100%"><tr><td style="width: 50%;">
+                                                    <a class="button" onclick="animateFull();">Animation 2002-2014</a>
+                                                    <script>
+                                                        function animateFull() {
+                                                            $("#resolutionslider").slider("value", 1.4);
+                                                            $("#volumeslider").slider("value", 8);
+                                                            $("#speed").val(70).trigger('change');
+                                                            $("#dateslider").dateRangeSlider("min", new Date(2002, 6, 1));
+                                                            $("#dateslider").dateRangeSlider("max", new Date(2002, 6, 1));
+                                                            $("#max").prop("checked", true);
+                                                            $("#myonoffswitch").click();
+                                                        };
+                                                    </script>
+                                                    </td>
+                                                    <td>
+                                                    Click on map markers for drone strike details.<br/>
+                                                    Data courtesy <a target="_blank" href="http://dronestre.am">dronestre.am</a>
+                                                    </td>
+                                                    </tr></table>
+                                                </article>
+
+    <script type="text/javascript">
+
+        var overlay = new google.maps.OverlayView();
+        var initdatemin = new Date(2002, 6, 1);
+        var initdatemax = new Date(2015, 0, 1);
+        var datemin = new Date(2002, 6, 1);
+        var datemax = new Date(2015, 0, 1);
+
+        $( "#resolutionslider" ).slider({
+          value:1.2,
+          min: .2,
+          max: 1.8,
+          step: .02,
+          change: function( event, ui ) {
+            overlay.draw();
+          }
+        });
+
+        $( "#volumeslider" ).slider({
+          value:16,
+          min: 2,
+          max: 30,
+          step:.1,
+          change: function( event, ui ) {
+            overlay.draw();
+          }
+        });
+
+        $("#dateslider").dateRangeSlider(
+                { bounds: {min: datemin, max: datemax}},
+                { defaultValues:{min: datemin, max: datemax}}
+        );
+        $("#dateslider").bind("valuesChanging", function(e, data){
+          if (!animate) {
+              datemin = data.values.min;
+              datemax = data.values.max;
+              overlay.draw();
+          }
+        });
+        $("#dateslider").bind("valuesChanged", function(e, data){
+          datemin = data.values.min;
+          datemax = data.values.max;
+          overlay.draw();
+        });
+
+        var animate = false;
+        var timer1, timer2;
+
+        $(".dial").knob({
+                        'min':1,
+                        'max':100,
+                        'width':50,
+                        'height':50,
+                        'fgColor':'#777777',
+                        'displayInput':true,
+                        'release' : function (v) {
+                            if (animate) {
+                                toggleAnimate();
+                                toggleAnimate();
+                            }
+                        }
+                        });
+
+        $("#step").keyup( function() {
+            if (animate) {
+                toggleAnimate();
+                toggleAnimate();
+            }
+        });
+
+        function stepdate(date, millistep) {
+            var millis = date.getTime();
+            millis += millistep;
+            var newdate =  new Date(millis);
+            if (newdate <= initdatemin || newdate >= initdatemax) {
+                $("#myonoffswitch").click();
+            }
+            else {
+                return newdate;
+            }
+        }
+
+        function toggleAnimate() {
+            animate = !animate;
+
+            if (animate) {
+                var direction;
+                var step = $("#step").val();
+
+                $("input:radio").attr('disabled',true);
+                if ($("input[name=direction]:checked").val() == "forward") {
+                    direction = 1;
+                }
+                else { direction = -1; }
+                switch ($("input[name=animate]:checked").val()) {
+                    case "min":
+                        timer1 = setInterval(function(){ $("#dateslider").dateRangeSlider('min', stepdate($("#dateslider").dateRangeSlider('min'), step*24*60*60*1000*direction)) }, 500 - $("#speed").val()*5);
+                        break;
+                    case "max":
+                        timer1 = setInterval(function(){ $("#dateslider").dateRangeSlider('max', stepdate($("#dateslider").dateRangeSlider('max'), step*24*60*60*1000*direction)) }, 500 - $("#speed").val()*5);
+                        break;
+                    case "minmax":
+                        timer1 = setInterval(function(){ $("#dateslider").dateRangeSlider('min', stepdate($("#dateslider").dateRangeSlider('min'), step*24*60*60*1000*direction)) }, 500 - $("#speed").val()*5);
+                        timer2 = setInterval(function(){ $("#dateslider").dateRangeSlider('max', stepdate($("#dateslider").dateRangeSlider('max'), step*24*60*60*1000*direction)) }, 500 - $("#speed").val()*5);
+                        break;
+                }
+            }
+            else {
+                $("input:radio").attr('disabled',false);
+                clearInterval(timer1);
+                clearInterval(timer2);
+            }
+        }
+
+        var width = 700,
+            height = 400,
+            parseDate = d3.time.format.utc("%Y-%m-%dT%H:%M:%S.%LZ").parse;
+
+        var mincolor = "#2222FF";
+        var midcolor = "#992299";
+        var maxcolor = "#FF2222";
+        var color = d3.time.scale()
+            .domain([new Date(2002, 6, 1),new Date(2010, 0, 1), new Date(2015, 0, 1)])
+            .range([mincolor, midcolor, maxcolor])
+            .interpolate(d3.interpolateLab);
+            $(".ui-rangeSlider-innerBar").css("background", "-webkit-linear-gradient(left, " + mincolor + ", " + midcolor + ", " + maxcolor + ")");
+
+        var hexbin = d3.hexbin()
+            .size([width, height])
+
+        var radius = d3.scale.sqrt();
+        $(".mapunit").text("strike");
+
+        var map = new google.maps.Map(d3.select("#map").node(), {
+          zoom: 4,
+          scrollwheel: false,
+          center: new google.maps.LatLng(19,53),
+          styles:
+[
+    {
+        "featureType": "landscape",
+        "stylers": [
+            {
+                "saturation": -100
+            },
+            {
+                "lightness": 0
+            },
+            {
+                "visibility": "on"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "stylers": [
+            {
+                "saturation": -100
+            },
+            {
+                "lightness": 60
+            },
+            {
+                "visibility": "on"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "stylers": [
+            {
+                "saturation": -100
+            },
+            {
+                "visibility": "simplified"
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "stylers": [
+            {
+                "saturation": -100
+            },
+            {
+                "lightness": 60
+            },
+            {
+                "visibility": "on"
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "stylers": [
+            {
+                "saturation": -100
+            },
+            {
+                "lightness": 60
+            },
+            {
+                "visibility": "on"
+            }
+        ]
+    },
+    {
+        "featureType": "transit",
+        "stylers": [
+            {
+                "saturation": -100
+            },
+            {
+                "visibility": "simplified"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.province",
+        "stylers": [
+            {
+                "visibility": "on"
+            },
+            {
+                "lightness": 60
+            },
+            {
+                "saturation": -100
+            }        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "labels",
+        "stylers": [
+            {
+                "visibility": "on"
+            },
+            {
+                "lightness": -25
+            },
+            {
+                "saturation": -100
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "hue": "#ffff00"
+            },
+            {
+                "lightness": -25
+            },
+            {
+                "saturation": -97
+            }
+        ]
+    }
+]
+        });
+        var markers = [];
+        var openInfoWindow;
+
+        d3.json("/assets/datavis/dronestrikes.json", function(data) {
+
+            var stores = [];
+            data.strike.forEach(function(point) {
+                point.date = parseDate(point.date);
+                stores.push(
+                    [point.lon,
+                    point.lat,
+                    point.date,
+                    point.town,
+                    Math.round((parseInt(point.deaths_min)+parseInt(point.deaths_max))/2),
+                    point.bij_link,
+                    point.bij_summary_short
+                    ])
+            });
+
+            // Add the container when the overlay is added to the map.
+            overlay.onAdd = function() {
+            var layer = d3.select(this.getPanes().overlayLayer).append("div")
+                    .attr("class", "datalayer");
+
+                var maxradius = $("#volumeslider").slider("value");
+                
+                overlay.draw = function() {
+                  var projection = this.getProjection();
+                  var w = projection.getWorldWidth();
+                  var inbounds = [];
+                  var bounds = map.getBounds();
+                  stores.forEach(function(point) {
+                      if (bounds.contains(new google.maps.LatLng(point[1],point[0])) &&
+                            point[2] >= datemin && point[2] <= datemax) inbounds.push(point);
+                  });
+
+                  hexbin.radius(.6 * (2 - $("#resolutionslider").slider("value")) * 4096/w);
+
+                  var hexbins = hexbin(inbounds).sort(function(a, b) { return b.length - a.length; });
+                  var maxbin = 0, minbin = 0;
+                  if (inbounds.length != 0) {
+                      maxbin = hexbins[0].length;
+                      minbin = hexbins[hexbins.length-1].length;
+                  }
+
+                  var minradius = 3;
+                  if (!animate) {
+                      maxradius = $("#volumeslider").slider("value");
+                  }
+                  radius.domain([0, maxbin]);
+                  radius.rangeRound([minradius, maxradius]);
+                  var radius1 = radius(1);
+
+                  var displaybins = [];
+                  var infowindows = [];
+                  hexbins.forEach(function(bin) {
+                      p = new google.maps.LatLng(bin.y, bin.x);
+                      p = projection.fromLatLngToDivPixel(p);
+                      displaybins.push([Math.round(p.x), Math.round(p.y), radius(bin.length), color(d3.median(bin, function(bin) { return +bin[2]; }))]);
+
+                      var strikes = []; // city, deaths, link, summary
+                      var deaths = 0;
+                      for (var i = 0, strike; strike = bin[i]; i++) {
+                          if (!isNaN(strike[4])) { deaths += strike[4]; }
+                          strikes.push(strike);
+                      }
+                      strikes.sort(function(a, b) { return b[4] - a[4]; });
+                      infowindows.push([bin.y, bin.x, strikes, deaths]);
+                  });
+
+                  d3.select("#minhex").select("svg")
+                      .attr("width", radius1*2+2)
+                      .attr("height", radius1*2+2)
+                      .select("path")
+                          .attr("class", "hexagonkey")
+                          .attr("d", function() { return hexbin.hexagon(radius1); })
+                          .attr("transform", function() { return "translate(" + radius1 + "," + radius1 + ")"; })
+                          .style("opacity", 0.9)
+                          .style("fill", "#ddd");
+                  $("#minbinlabel").text(minbin);
+                  d3.select("#maxhex").select("svg")
+                      .attr("width", maxradius*2)
+                      .attr("height", maxradius*2)
+                      .select("path")
+                          .attr("class", "hexagonkey")
+                          .attr("d", function() { return hexbin.hexagon(maxradius); })
+                          .attr("transform", function() { return "translate(" + maxradius + "," + maxradius + ")"; })
+                          .style("opacity", 0.9)
+                          .style("fill", "#ddd");
+                  $("#maxbinlabel").text(maxbin);
+
+                  var points = layer.selectAll("svg").data(displaybins, function(d){return d;});
+                      points.enter().append("svg")
+                          .style("left", function(d) { return (d[0]-d[2]) + "px"; })
+                          .style("top", function(d) { return (d[1]-d[2]) + "px"; })
+                          .attr("width", maxradius*2)
+                          .attr("height", maxradius*2)
+                      .append("path")
+                          .attr("class", "hexagon")
+                          .attr("d", function(d) { return hexbin.hexagon(d[2]); })
+                          .attr("transform", function(d) { return "translate(" + d[2] + "," + d[2] + ")"; })
+                          .style("fill", function(d) { return d[3]; })
+                          .style("opacity", 0.9);
+                      points.exit().remove();
+
+
+                    // Add a marker for Chicago, IL
+                        for (var i = 0; i < markers.length; i++ ) {
+                            markers[i].setMap(null);
+                        }
+                        markers.length = 0;
+
+                      var image = {
+                        url: '/assets/img/10x10.png',
+                        size: new google.maps.Size(10, 10),
+                        // The origin for this image is 0,0.
+                        origin: new google.maps.Point(0,0),
+                        // The anchor for this image is the base of the flagpole at 0,32.
+                        anchor: new google.maps.Point(5, 5)
+                      };
+
+                    infowindows.forEach(function(point) {
+                        var chMarker = new google.maps.Marker({
+                            map: map,
+                            position: new google.maps.LatLng(point[0], point[1]),
+                            icon: image,
+                            title: point[3] + ' Deaths'
+                        });
+                        markers.push(chMarker);
+                        var chHtml = '<div style="max-height: 200px;"> \
+                            <table style="text-align: left;"> \
+                                <tr><td colspan="2" class="inforow" style="text-align: right;">\
+                                    <h2>' + point[3] +' deaths, ' + point[2].length +' strikes</h2>\
+                                </td></tr>\
+                                <tr> \
+                                    <td class="inforow" style="width: 15em; padding-right: 15px;"> \
+                                        <b>City (Deaths)</b> \
+                                    </td> \
+                                    <td class="inforow"> \
+                                        <b>Summary</b> \
+                                    </td> \
+                                </tr>';
+                        point[2].forEach(function(strike) {
+                            chHtml += ' \
+                                <tr> \
+                                    <td> \
+                                        <b><a style="font-size: 1.2em; font-weight: 500" href="' + strike[5] +'" target="_blank">' + strike[3] +' (' + strike[4] +')</a></b> \
+                                    </td> \
+                                    <td> \
+                                        ' + strike[6] +' \
+                                    </td> \
+                                </tr>';
+                        });
+                        chHtml += ' \
+                            </table> \
+                        </div>';
+
+                        // add an infowindow
+                        var chInfoWindow = new google.maps.InfoWindow({
+                        content: chHtml,
+                        maxWidth:500
+                        });
+                        //open infowindow on click event on marker.
+                        google.maps.event.addListener(chMarker, 'click', function() {
+                        if (openInfoWindow) { openInfoWindow.close(); }
+                        openInfoWindow = chInfoWindow;
+                        chInfoWindow.open(map, chMarker);
+                        });
+                    });
+
+                };
+            };
+
+            overlay.setMap(map);
+        });
+
+function initialize() {
+
+  var input = /** @type {HTMLInputElement} */(
+      document.getElementById('pac-input'));
+  map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+  var searchBox = new google.maps.places.SearchBox(
+    /** @type {HTMLInputElement} */(input));
+
+  // Listen for the event fired when the user selects an item from the
+  // pick list. Retrieve the matching places for that item.
+  google.maps.event.addListener(searchBox, 'places_changed', function() {
+    var places = searchBox.getPlaces();
+
+    // For each place, get the icon, place name, and location.
+    var bounds = new google.maps.LatLngBounds();
+    for (var i = 0, place; place = places[i]; i++) {
+      var image = {
+        url: place.icon,
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(25, 25)
+      };
+
+      bounds.extend(place.geometry.location);
+    }
+
+    map.fitBounds(bounds);
+    map.setZoom(7);
+  });
+
+  // Bias the SearchBox results towards places that are within the bounds of the
+  // current map's viewport.
+  google.maps.event.addListener(map, 'bounds_changed', function() {
+    var bounds = map.getBounds();
+    searchBox.setBounds(bounds);
+  });
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+google.maps.event.addListener(map, 'dragend', function() { overlay.draw(); } );
+    </script>
+											</div>
+										</div>
+									</div>
+								</section>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		<!-- Footer Wrapper -->
+			<div id="footer-wrapper">
+				
+				<!-- Footer -->
+					<section id="footer" class="container">
+						<div class="row">
+							<div class="12u">
+
+								<!-- Copyright -->
+									<div id="copyright">
+										<ul class="links">
+											<li><a href="mailto:contact@christopherperdue.com">contact@christopherperdue.com</a></li>
+											<li>&copy; 2014	</li>
+										</ul>
+									</div>
+
+							</div>
+						</div>
+					</section>
+			</div>
+
+<!-- Start of StatCounter Code for Default Guide -->
+<script type="text/javascript">
+var sc_project=9690344;
+var sc_invisible=1;
+var sc_security="511b5c01";
+var scJsHost = (("https:" == document.location.protocol) ?
+"https://secure." : "http://www.");
+document.write("<sc"+"ript type='text/javascript' src='" +
+scJsHost+
+"statcounter.com/counter/counter.js'></"+"script>");
+</script>
+<noscript><div class="statcounter"><a title="free hit
+counter" href="http://statcounter.com/free-hit-counter/"
+target="_blank"><img class="statcounter"
+src="http://c.statcounter.com/9690344/0/511b5c01/1/"
+alt="free hit counter"></a></div></noscript>
+<!-- End of StatCounter Code for Default Guide -->
+
+    </body>
+
+
