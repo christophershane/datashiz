@@ -156,7 +156,7 @@ comments: true
 
 
 											<div class="9u skel-cell-mainContent">
-                                                <div style="height: 600px;" class="box" id="map"></div>
+                                                <div style="height: 40vh;" class="box" id="map"></div>
                                                 <input id="pac-input" class="controls" type="text" placeholder="Search Box">
                                                 <article class="box is-post">
                                                     <table style="width: 100%"><tr><td style="width: 50%;">
@@ -606,9 +606,10 @@ comments: true
                         });
                         //open infowindow on click event on marker.
                         google.maps.event.addListener(chMarker, 'click', function() {
-                        if (openInfoWindow) { openInfoWindow.close(); }
-                        openInfoWindow = chInfoWindow;
-                        chInfoWindow.open(map, chMarker);
+
+                            // if (openInfoWindow) { openInfoWindow.close(); }
+                            // openInfoWindow = chInfoWindow;
+                            // chInfoWindow.open(map, chMarker);
                         });
                     });
 
@@ -685,27 +686,6 @@ google.maps.event.addListener(map, 'dragend', function() { overlay.draw(); } );
 						</div>
 					</div>
 				</div>
-			</div>
-
-		<!-- Footer Wrapper -->
-			<div id="footer-wrapper">
-				
-				<!-- Footer -->
-					<section id="footer" class="container">
-						<div class="row">
-							<div class="12u">
-
-								<!-- Copyright -->
-									<div id="copyright">
-										<ul class="links">
-											<li><a href="mailto:contact@christopherperdue.com">contact@christopherperdue.com</a></li>
-											<li>&copy; 2014	</li>
-										</ul>
-									</div>
-
-							</div>
-						</div>
-					</section>
 			</div>
 
 <!-- Start of StatCounter Code for Default Guide -->
