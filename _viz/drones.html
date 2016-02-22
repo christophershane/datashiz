@@ -156,11 +156,16 @@ comments: true
 
 
 											<div class="9u skel-cell-mainContent">
-                                                <div style="height: 40vh;" class="box" id="map"></div>
+                                                <div style="width: 70%; text-align: right;">click for strike details</div>
+                                                <div style="height: 50vh; width: 70%;" class="box" id="map"></div>
                                                 <input id="pac-input" class="controls" type="text" placeholder="Search Box">
                                                 <article class="box is-post">
                                                     <table style="width: 100%"><tr><td style="width: 50%;">
-                                                    <a class="button" onclick="animateFull();">Animation 2002-2014</a>
+                                                    <div>Timelapse</div>
+                                                    <a class="btn btn-default btn-sm" href="#"
+                                                         onclick="animateFull();">
+                                                        <i class="fa fa-cog"></i>
+                                                    </a>
                                                     <script>
                                                         function animateFull() {
                                                             $("#resolutionslider").slider("value", 1.4);
@@ -174,7 +179,6 @@ comments: true
                                                     </script>
                                                     </td>
                                                     <td>
-                                                    Click on map markers for drone strike details.<br/>
                                                     Data courtesy <a target="_blank" href="http://dronestre.am">dronestre.am</a>
                                                     </td>
                                                     </tr></table>
@@ -294,8 +298,8 @@ comments: true
             }
         }
 
-        var width = 700,
-            height = 400,
+        var width = (window.innerWidth * .8) * .7,
+            height = (window.innerHeight * .8) * .7,
             parseDate = d3.time.format.utc("%Y-%m-%dT%H:%M:%S.%LZ").parse;
 
         var mincolor = "#2222FF";
